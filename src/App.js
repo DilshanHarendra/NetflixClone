@@ -7,7 +7,7 @@ import MovieRow from "./MovieRow";
 import Urls from "./urls";
 
 function App() {
-console.log(process.env.REACT_APP_BASEURL)
+
   return <div className="App">
     <Navigation/>
     <Banner/>
