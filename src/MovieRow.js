@@ -40,7 +40,7 @@ function MovieRow({title,url,originals}){
             }
 
             },20)
-    },500);
+    },5000);
 
 
 
