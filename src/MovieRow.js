@@ -3,12 +3,12 @@ import './css/MovieRow.css';
 import YouTube from "react-youtube";
 import movieTrailer from "movie-trailer";
 import axios from './axios';
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.min.css';
 function MovieRow({title,url,originals}){
 
 
-    var x=0;
-    var startAnimate=false;
+
     const [trailerUrl,settrailerUrl] =useState('');
     const [movies,setmovies] =useState([]);
 
@@ -18,7 +18,7 @@ function MovieRow({title,url,originals}){
         async function getData(){
             let data=await axios.get(url);
             setmovies(data.data.results);
-            startAnimate=true;
+
         }
         getData();
 
@@ -27,20 +27,7 @@ function MovieRow({title,url,originals}){
     },[url]);
 
 
-    setTimeout(()=>{
-        setInterval(()=>{
-            if (startAnimate){
-                var row = document.getElementById(title);
-                if(x<(row.scrollWidth- row.offsetWidth)){
-                    row.scrollLeft=x;
-                    x+=0.5;
-                }else{
-                    x=0;
-                }
-            }
 
-            },20)
-    },5000);
 
 
 
@@ -49,7 +36,7 @@ function MovieRow({title,url,originals}){
         if (trailerUrl){
             settrailerUrl('')
         }else{
-            movieTrailer(movie?.name||"").then(url=>{
+            movieTrailer(movie?.name||movie?.original_title||"").then(url=>{
                 const params =new URLSearchParams(new URL(url).search);
                 settrailerUrl(params.get('v'));
 
@@ -58,7 +45,7 @@ function MovieRow({title,url,originals}){
 
     }
     const opts = {
-        height: '390',
+        height: '500',
         width: '100%',
         playerVars: {
             autoplay: 1,
@@ -66,7 +53,8 @@ function MovieRow({title,url,originals}){
     };
     const style={
         height:350,
-        maxHeight:350
+        maxHeight:350,
+        width: 250
     }
         return (
             <div className="movieRow">
@@ -75,13 +63,33 @@ function MovieRow({title,url,originals}){
                 </h1>
 
                 <div className="row" id={title}   >
-                    {movies.map(movie=>(
-                        <img key={movie.id}
-                             onClick={()=>playTrailer(movie)}
-                             style={originals?style:{}}
-                             src={originals?process.env.REACT_APP_IMAGE_BASE_URL+movie.poster_path : process.env.REACT_APP_IMAGE_BASE_URL+movie.backdrop_path}
-                             alt={movie.title}/>
-                    ))}
+
+                    <Swiper
+                        spaceBetween={20}
+                        slidesPerView={5}
+                        slidesPerGroup={2}
+
+
+                    >
+                        {movies.map(movie=>(
+                            <SwiperSlide
+                                key={movie.id}
+                            style={{marginRight:'5px !important'}}
+                            >
+                            <img
+                                 onClick={()=>playTrailer(movie)}
+                                 style={originals?style:{}}
+                                 src={originals?process.env.REACT_APP_IMAGE_BASE_URL+movie.poster_path : process.env.REACT_APP_IMAGE_BASE_URL+movie.backdrop_path}
+                                 alt={movie.title}/>
+                            </SwiperSlide>
+                        ))}
+
+
+
+
+                    </Swiper>
+
+
                 </div>
                 {trailerUrl && <YouTube  opts={opts} videoId={trailerUrl} />}
 

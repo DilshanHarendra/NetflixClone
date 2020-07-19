@@ -32,9 +32,12 @@ html {
 .movieRow .row::-webkit-scrollbar{
     display: none;
 }
-
+.movieRow .swiper-slide{
+    width: auto!important;
+    margin-right: 5px !important;
+}
 .movieRow .row img{
-    width: 100%;
+    width: 300px;
     margin-right: 10px;
     max-height: 200px;
     transition: transform .45s;

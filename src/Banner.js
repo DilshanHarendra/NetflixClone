@@ -15,7 +15,7 @@ const [movie,setmovie]=useState('');
            setmovie(data.data.results[x]);
         }
         getData();
-    },[])
+    },[]);
 
 
         return (
